@@ -17,7 +17,7 @@ const NATURE = {
       name: 'endpoint'
     },
     {
-      type: 'string',
+      type: 'scenario-input',
       label: 'scenario-name',
       name: 'scenarioName'
     }
@@ -69,6 +69,9 @@ export default class StatusSubscription extends DataSource(RectPath(Shape)) {
 
   async requestData() {
     var { endpoint, scenarioName } = this.state
+    if (!scenarioName || scenarioName == 'All') {
+      scenarioName = ''
+    }
     var self = this
     var query = `
     subscription {
@@ -91,8 +94,10 @@ export default class StatusSubscription extends DataSource(RectPath(Shape)) {
 
     this.client.onError(() => {
       var client = this.client
-      //readyState === 3 인 경우 url을 잘 못 입력했거나, 서버에 문제가 있는 경우이므로 reconnect = false로 변경한다.
-      if (client.status === 3) client.reconnect = false
+      // 보드가 실행중이면 재시도, 아니면 재연결 취소
+      if (this.disposed) client.reconnect = false
+      this.client.unsubscribeAll()
+      this.client.close(true)
     })
 
     this.client.onConnected(() => {

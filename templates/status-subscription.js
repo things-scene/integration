@@ -13,6 +13,7 @@ export default {
     width: 100,
     height: 100,
     autoStart: true,
-    period: 0
+    period: 0,
+    endpoint: 'ws://localhost:3000/subscriptions'
   }
 }

@@ -174,12 +174,21 @@ export class ScenarioControl extends DataSource(RectPath(Shape)) {
     let { controlType, scenarioName } = this.state
     if (!controlType || !scenarioName || !this.app.isViewMode) return
     var client = this._client
-    var query =
-      `mutation{
+    var query = ''
+    if (controlType == 'start') {
+      query = `mutation{
+        ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables:{}) {
+          status
+        }
+      }`
+    } else {
+      query = `mutation{
         ${controlType}Scenario(instanceName: "${scenarioName}") {
           status
         }
       }`
+    }
+
 
     if (client) {
       var response = await client.query({

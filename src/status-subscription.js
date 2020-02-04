@@ -17,7 +17,7 @@ const NATURE = {
       name: 'endpoint'
     },
     {
-      type: 'scenario-input',
+      type: 'string',
       label: 'scenario-name',
       name: 'scenarioName'
     }

@@ -1,3 +1,5 @@
 {
-  "keyword": "keyword"
+  "keyword": "keyword",
+  "label.scenario-name": "Scenario Name",
+  "label.control-type": "Control Type"
 }

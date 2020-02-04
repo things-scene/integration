@@ -1,3 +1,5 @@
 {
-  "keyword": "키워드"
+  "keyword": "키워드",
+  "label.scenario-name": "시나리오 명",
+  "label.control-type": "작업 타입"
 }

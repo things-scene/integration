@@ -105,7 +105,7 @@ const NATURE = {
   'value-property': 'value'
 }
 
-export class ScenarioControl extends DataSource(RectPath(Shape)) {
+export default class ScenarioControl extends DataSource(RectPath(Shape)) {
   static get image() {
     if (!ScenarioControl._image) {
       ScenarioControl._image = new Image()
@@ -189,18 +189,15 @@ export class ScenarioControl extends DataSource(RectPath(Shape)) {
       }`
     }
 
-
     if (client) {
       var response = await client.query({
         query: gql`
         ${query}
         `
       })
-      console.log('response', response)
       this.data = response
     }
   }
-
 }
 
 Component.register('scenario-control', ScenarioControl)

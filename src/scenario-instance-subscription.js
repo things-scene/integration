@@ -84,6 +84,11 @@ const NATURE = {
       type: 'string',
       label: 'scenario-name',
       name: 'scenarioName'
+    },
+    {
+      type: 'string',
+      label: 'instance-name',
+      name: 'instanceName'
     }
   ]
 }
@@ -127,6 +132,7 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
   }
 
   ready() {
+    if (!this.app.isViewMode) return
     this._initScenarioInstanceSubscription()
   }
 
@@ -136,12 +142,13 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
 
   async _initScenarioInstanceSubscription() {
     if (!this.app.isViewMode) return
-    await this.requestFirstData()
+    await this.requestInitData()
     this.requestSubData()
   }
 
-  async requestFirstData() {
-    var { initDataEndpoint, scenarioName = '' } = this.state
+  async requestInitData() {
+    var { initDataEndpoint, instanceName } = this.state
+    if (!instanceName) return
     var cache = new InMemoryCache()
     this.queryClient = new ApolloClient({
       defaultOptions,
@@ -157,8 +164,7 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
     var response = await this.queryClient.query({
       query: gql`
         query{
-          scenarioInstances(filters:[{name:"name", operator:"eq", value:"${scenarioName}"}]) {
-            items{
+          scenarioInstance(instanceName:"${instanceName}") {
               instanceName
               scenarioName
               state
@@ -172,18 +178,16 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
               data
               message
               timestamp
-            }
-            total
           }
         }
       `
     })
-    this.data = response
+    this.data = response.data.scenarioInstance
   }
 
 
   requestSubData() {
-    var { endpoint, scenarioName = '' } = this.state
+    var { endpoint, scenarioName = '', instanceName = '' } = this.state
     var self = this
     var query =
       `subscription {
@@ -220,7 +224,7 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
       this.subscription = this.client.request({ query }).subscribe({
         next({ data }) {
           if (data) {
-            self.data = data
+            self.data = data.scenarioInstanceState
           }
         }
       })

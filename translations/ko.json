@@ -2,5 +2,6 @@
   "keyword": "키워드",
   "label.scenario-name": "시나리오 명",
   "label.control-type": "작업 타입",
-  "label.init-data-endpoint": "초기 데이터 엔드포인트"
+  "label.init-data-endpoint": "초기 데이터 엔드포인트",
+  "label.instance-name": "인스턴스 명"
 }

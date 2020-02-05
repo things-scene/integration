@@ -1,7 +1,7 @@
 {
   "name": "@things-scene/integration",
   "description": "integration component for things-scene",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "things-scene": true,
   "main": "src/index.js",
   "module": "dist/things-scene-integration.mjs",
@@ -26,11 +26,11 @@
   },
   "dependencies": {
     "@hatiolab/things-scene": "*",
-    "subscriptions-transport-ws": "*",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.12",
     "apollo-link-error": "^1.1.11",
-    "apollo-link-http": "^1.5.15"
+    "apollo-link-http": "^1.5.15",
+    "subscriptions-transport-ws": "*"
   }
 }

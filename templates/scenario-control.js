@@ -1,4 +1,4 @@
-import icon from '../assets/icon-scenario-control.png'
+import icon from '../assets/icon-integration.png'
 
 export default {
   type: 'scenario-control',

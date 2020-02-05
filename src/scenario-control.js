@@ -1,7 +1,7 @@
 /*
  * Copyright © HatioLab Inc. All rights reserved.
  */
-import COMPONENT_IMAGE from '../assets/symbol-scenario-control.png'
+import COMPONENT_IMAGE from '../assets/symbol-integration.png'
 import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'

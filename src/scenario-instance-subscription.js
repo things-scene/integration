@@ -2,7 +2,7 @@
  * Copyright © HatioLab Inc. All rights reserved.
  */
 
-import COMPONENT_IMAGE from '../assets/symbol-scenario-instance-subscription.png'
+import COMPONENT_IMAGE from '../assets/symbol-integration.png'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
 import { ApolloClient } from 'apollo-client'

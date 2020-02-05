@@ -1,4 +1,4 @@
-import icon from '../assets/icon-data-subscription.png'
+import icon from '../assets/icon-integration.png'
 
 export default {
   type: 'data-subscription',

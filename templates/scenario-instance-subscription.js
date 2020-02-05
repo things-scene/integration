@@ -1,4 +1,4 @@
-import icon from '../assets/icon-scenario-instance-subscription.png'
+import icon from '../assets/icon-integration.png'
 
 export default {
   type: 'scenario-instance-subscription',

@@ -140,9 +140,9 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
     return NATURE
   }
 
-  async _initScenarioInstanceSubscription() {
+  _initScenarioInstanceSubscription() {
     if (!this.app.isViewMode) return
-    await this.requestInitData()
+    this.requestInitData()
     this.requestSubData()
   }
 

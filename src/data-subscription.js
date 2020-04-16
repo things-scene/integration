@@ -94,7 +94,7 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
       this.subscription = this.client.request({ query }).subscribe({
         next({ data }) {
           if (data) {
-            self.data = data
+            self.data = data.publishData.data
           }
         }
       })

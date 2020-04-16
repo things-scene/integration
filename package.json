@@ -1,7 +1,7 @@
 {
   "name": "@things-scene/integration",
   "description": "integration component for things-scene",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "things-scene": true,
   "main": "src/index.js",
   "module": "dist/things-scene-integration.mjs",

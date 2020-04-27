@@ -102,7 +102,7 @@ const NATURE = {
       }
     }
   ],
-  'value-property': 'value'
+  'value-property': 'controlType'
 }
 
 export default class ScenarioControl extends DataSource(RectPath(Shape)) {
@@ -144,7 +144,7 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
   }
 
   onchange(after) {
-    if ('value' in after) {
+    if ('controlType' in after) {
       this.requestData()
     }
   }
@@ -152,6 +152,15 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
   get client() {
     return this._client
   }
+
+  get controlType() {
+    return this.get('controlType')
+  }
+
+  set controlType(controlType) {
+    this.set('controlType', controlType)
+  }
+
 
   _makeClient() {
     var endpoint = this.state.endpoint

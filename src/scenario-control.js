@@ -178,13 +178,13 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     if (controlType == 'start') {
       query = `mutation{
         ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables:{}) {
-          status
+          state
         }
       }`
     } else {
       query = `mutation{
         ${controlType}Scenario(instanceName: "${scenarioName}") {
-          status
+          state
         }
       }`
     }

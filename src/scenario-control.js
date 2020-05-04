@@ -6,7 +6,7 @@ import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink } from 'apollo-link-http'
 import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
 
@@ -70,11 +70,6 @@ const NATURE = {
   properties: [
     {
       type: 'string',
-      label: 'endpoint',
-      name: 'endpoint'
-    },
-    {
-      type: 'string',
       label: 'scenario-name',
       name: 'scenarioName'
     },
@@ -83,21 +78,23 @@ const NATURE = {
       label: 'control-type',
       name: 'controlType',
       property: {
-        options: [{
-          display: "start",
-          value: "start"
-        }, {
-          display: "stop",
-          value: "stop"
-        },
-        {
-          display: "pause",
-          value: "pause"
-        },
-        {
-          display: "resume",
-          value: "resume"
-        }
+        options: [
+          {
+            display: 'start',
+            value: 'start'
+          },
+          {
+            display: 'stop',
+            value: 'stop'
+          },
+          {
+            display: 'pause',
+            value: 'pause'
+          },
+          {
+            display: 'resume',
+            value: 'resume'
+          }
         ]
       }
     }
@@ -161,18 +158,15 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     this.set('controlType', controlType)
   }
 
-
   _makeClient() {
-    var endpoint = this.state.endpoint
-    if (!endpoint) return
     var cache = new InMemoryCache()
     const client = new ApolloClient({
       defaultOptions,
       cache,
       link: ApolloLink.from([
         onError(ERROR_HANDLER),
-        new HttpLink({
-          endpoint,
+        createHttpLink({
+          uri: '/graphql',
           credentials: 'include'
         })
       ])
@@ -201,7 +195,7 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     if (client) {
       var response = await client.query({
         query: gql`
-        ${query}
+          ${query}
         `
       })
       this.data = response

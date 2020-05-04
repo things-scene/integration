@@ -8,7 +8,7 @@ import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
+import { createHttpLink } from 'apollo-link-http'
 import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
 
@@ -72,16 +72,6 @@ const NATURE = {
   properties: [
     {
       type: 'string',
-      label: 'init-data-endpoint',
-      name: 'initDataEndpoint'
-    },
-    {
-      type: 'string',
-      label: 'endpoint',
-      name: 'endpoint'
-    },
-    {
-      type: 'string',
       label: 'scenario-name',
       name: 'scenarioName'
     },
@@ -121,7 +111,6 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
       console.error(e)
     }
     delete this.queryClient
-
   }
 
   render(context) {
@@ -147,16 +136,18 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
   }
 
   async requestInitData() {
-    var { initDataEndpoint, instanceName } = this.state
-    if (!instanceName) return
+    var { instanceName, scenarioName = '' } = this.state
+
+    instanceName = instanceName || scenarioName
+
     var cache = new InMemoryCache()
     this.queryClient = new ApolloClient({
       defaultOptions,
       cache,
       link: ApolloLink.from([
         onError(ERROR_HANDLER),
-        new HttpLink({
-          initDataEndpoint,
+        createHttpLink({
+          uri: '/graphql',
           credentials: 'include'
         })
       ])
@@ -185,13 +176,14 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
     this.data = response.data.scenarioInstance
   }
 
-
   requestSubData() {
-    var { endpoint, scenarioName = '', instanceName = '' } = this.state
+    var { instanceName, scenarioName = '' } = this.state
+
+    instanceName = instanceName || scenarioName
+
     var self = this
-    var query =
-      `subscription {
-        scenarioInstanceState(instanceName: "${scenarioName}", scenarioName: "${scenarioName}") {
+    var query = `subscription {
+        scenarioInstanceState(instanceName: "${instanceName}", scenarioName: "${scenarioName}") {
             instanceName
             scenarioName
             state
@@ -207,6 +199,8 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
             timestamp
         }
       }`
+
+    var endpoint = location.origin.replace(/^http/, 'ws') + '/subscriptions'
 
     this.client = new SubscriptionClient(endpoint, {
       reconnect: true

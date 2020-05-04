@@ -13,11 +13,6 @@ const NATURE = {
   properties: [
     {
       type: 'string',
-      label: 'endpoint',
-      name: 'endpoint'
-    },
-    {
-      type: 'string',
       label: 'tag',
       name: 'tag'
     }
@@ -68,7 +63,7 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
   }
 
   async requestData() {
-    var { endpoint, tag } = this.state
+    var { tag } = this.state
     var self = this
     var query = `
     subscription {
@@ -77,6 +72,7 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
         data
       }
     }`
+    var endpoint = location.origin.replace(/^http/, 'ws') + '/subscriptions'
 
     this.client = new SubscriptionClient(endpoint, {
       reconnect: true

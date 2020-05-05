@@ -78,12 +78,15 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
       reconnect: true
     })
 
-    this.client.onError(() => {
+    this.client.onError(e => {
       var client = this.client
       // 보드가 실행중이면 재시도, 아니면 재연결 취소
-      if (this.disposed) client.reconnect = false
-      this.client.unsubscribeAll()
-      this.client.close(true)
+      if (this.disposed) {
+        client.reconnect = false
+
+        this.client.unsubscribeAll()
+        this.client.close(true)
+      }
     })
 
     this.client.onConnected(() => {

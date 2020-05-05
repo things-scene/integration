@@ -131,8 +131,8 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
 
   _initScenarioInstanceSubscription() {
     if (!this.app.isViewMode) return
-    this.requestInitData()
     this.requestSubData()
+    this.requestInitData()
   }
 
   async requestInitData() {
@@ -173,7 +173,11 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
         }
       `
     })
-    this.data = response.data.scenarioInstance
+
+    if (!this.data) {
+      // this.data에 어떤 값이 있다면, 초기데이타를 적용할 필요가 없다.
+      this.data = response.data.scenarioInstance
+    }
   }
 
   requestSubData() {
@@ -206,12 +210,15 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
       reconnect: true
     })
 
-    this.client.onError(() => {
+    this.client.onError(e => {
       var client = this.client
       // 보드가 실행중이면 재시도, 아니면 재연결 취소
-      if (this.disposed) client.reconnect = false
-      this.client.unsubscribeAll()
-      this.client.close(true)
+      if (this.disposed) {
+        client.reconnect = false
+
+        this.client.unsubscribeAll()
+        this.client.close(true)
+      }
     })
 
     this.client.onConnected(() => {

@@ -80,6 +80,10 @@ const NATURE = {
       property: {
         options: [
           {
+            display: '',
+            value: ''
+          },
+          {
             display: 'start',
             value: 'start'
           },
@@ -119,8 +123,13 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
 
   ready() {
     super.ready()
+    this._initScenario()
+  }
+
+  _initScenario() {
     if (!this.app.isViewMode) return
     this._makeClient()
+    this.requestData()
   }
 
   dispose() {

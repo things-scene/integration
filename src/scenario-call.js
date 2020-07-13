@@ -74,10 +74,17 @@ export default class ScenarioCall extends DataSource(RectPath(Shape)) {
   }
 
   onchange(after) {
-    console.log(after)
     if ('variables' in after) {
       this.requestData()
     }
+  }
+
+  get variables() {
+    return this.state.variables
+  }
+
+  set variables(variables) {
+    this.setState('variables', variables)
   }
 
   get client() {
@@ -85,12 +92,12 @@ export default class ScenarioCall extends DataSource(RectPath(Shape)) {
   }
 
   async requestData() {
-    let { instanceName, scenarioName } = this.state
+    let { instanceName, scenarioName, variables } = this.state
     if (!scenarioName || !this.app.isViewMode) return
 
     var client = this._client
     try {
-      var variables = typeof this.variables == 'string' ? JSON.parse(this.variables) : this.variables
+      variables = typeof variables == 'string' ? JSON.parse(variables) : variables
     } catch (e) {
       console.error(e)
     }
@@ -113,7 +120,7 @@ export default class ScenarioCall extends DataSource(RectPath(Shape)) {
         }
       })
 
-      this.data = response
+      this.data = response?.data?.callScenario?.data
     }
   }
 }

@@ -3,65 +3,8 @@
  */
 import COMPONENT_IMAGE from '../assets/symbol-integration.png'
 import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloLink } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
-
-const defaultOptions = {
-  watchQuery: {
-    fetchPolicy: 'no-cache',
-    errorPolicy: 'ignore'
-  },
-  query: {
-    fetchPolicy: 'no-cache', //'network-only'
-    errorPolicy: 'all'
-  },
-  mutate: {
-    errorPolicy: 'all'
-  }
-}
-
-const ERROR_HANDLER = ({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) => {
-      document.dispatchEvent(
-        new CustomEvent('notify', {
-          detail: {
-            level: 'error',
-            message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            ex: graphQLErrors
-          }
-        })
-      )
-    })
-
-  if (networkError) {
-    switch (networkError.statusCode) {
-      case 401:
-        /* 401 에러가 리턴되면, 인증이 필요하다는 메시지를 dispatch 한다. 이 auth 모듈 등에서 이 메시지를 받아서 signin 프로세스를 진행할 수 있다. */
-        document.dispatchEvent(
-          new CustomEvent('auth-required', {
-            bubbles: true,
-            composed: true
-          })
-        )
-        break
-      default:
-        document.dispatchEvent(
-          new CustomEvent('notify', {
-            detail: {
-              level: 'error',
-              message: `[Network error - ${networkError.statusCode}]: ${networkError}`,
-              ex: networkError
-            }
-          })
-        )
-    }
-  }
-}
+import { createLocalClient } from './local-client'
 
 const NATURE = {
   mutable: false,
@@ -128,7 +71,8 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
 
   _initScenario() {
     if (!this.app.isViewMode) return
-    this._makeClient()
+
+    this._client = createLocalClient()
     this.requestData()
   }
 
@@ -167,21 +111,6 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     this.set('controlType', controlType)
   }
 
-  _makeClient() {
-    var cache = new InMemoryCache()
-    const client = new ApolloClient({
-      defaultOptions,
-      cache,
-      link: ApolloLink.from([
-        onError(ERROR_HANDLER),
-        createHttpLink({
-          uri: '/graphql',
-          credentials: 'include'
-        })
-      ])
-    })
-    this._client = client
-  }
   async requestData() {
     let { controlType, scenarioName } = this.state
     if (!controlType || !scenarioName || !this.app.isViewMode) return

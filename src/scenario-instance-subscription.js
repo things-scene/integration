@@ -5,65 +5,8 @@
 import COMPONENT_IMAGE from '../assets/symbol-integration.png'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { Component, DataSource, RectPath, Shape } from '@hatiolab/things-scene'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloLink } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import { onError } from 'apollo-link-error'
 import gql from 'graphql-tag'
-
-const defaultOptions = {
-  watchQuery: {
-    fetchPolicy: 'no-cache',
-    errorPolicy: 'ignore'
-  },
-  query: {
-    fetchPolicy: 'no-cache', //'network-only'
-    errorPolicy: 'all'
-  },
-  mutate: {
-    errorPolicy: 'all'
-  }
-}
-
-const ERROR_HANDLER = ({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) => {
-      document.dispatchEvent(
-        new CustomEvent('notify', {
-          detail: {
-            level: 'error',
-            message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            ex: graphQLErrors
-          }
-        })
-      )
-    })
-
-  if (networkError) {
-    switch (networkError.statusCode) {
-      case 401:
-        /* 401 에러가 리턴되면, 인증이 필요하다는 메시지를 dispatch 한다. 이 auth 모듈 등에서 이 메시지를 받아서 signin 프로세스를 진행할 수 있다. */
-        document.dispatchEvent(
-          new CustomEvent('auth-required', {
-            bubbles: true,
-            composed: true
-          })
-        )
-        break
-      default:
-        document.dispatchEvent(
-          new CustomEvent('notify', {
-            detail: {
-              level: 'error',
-              message: `[Network error - ${networkError.statusCode}]: ${networkError}`,
-              ex: networkError
-            }
-          })
-        )
-    }
-  }
-}
+import { createLocalClient } from './local-client'
 
 const NATURE = {
   mutable: false,
@@ -140,18 +83,8 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
 
     instanceName = instanceName || scenarioName
 
-    var cache = new InMemoryCache()
-    this.queryClient = new ApolloClient({
-      defaultOptions,
-      cache,
-      link: ApolloLink.from([
-        onError(ERROR_HANDLER),
-        createHttpLink({
-          uri: '/graphql',
-          credentials: 'include'
-        })
-      ])
-    })
+    this.queryClient = createLocalClient()
+
     var response = await this.queryClient.query({
       query: gql`
         query{
@@ -211,10 +144,9 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
     })
 
     this.client.onError(e => {
-      var client = this.client
       // 보드가 실행중이면 재시도, 아니면 재연결 취소
       if (this.disposed) {
-        client.reconnect = false
+        this.client.reconnect = false
 
         this.client.unsubscribeAll()
         this.client.close(true)

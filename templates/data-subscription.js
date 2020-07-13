@@ -11,9 +11,6 @@ export default {
     left: 10,
     top: 10,
     width: 100,
-    height: 100,
-    autoStart: true,
-    period: 0,
-    endpoint: 'ws://localhost:3000/subscriptions'
+    height: 100
   }
 }

@@ -16,7 +16,8 @@ const NATURE = {
       label: 'tag',
       name: 'tag'
     }
-  ]
+  ],
+  'value-property': 'tag'
 }
 
 export default class DataSubscription extends DataSource(RectPath(Shape)) {
@@ -54,6 +55,14 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
 
   get nature() {
     return NATURE
+  }
+
+  get tag() {
+    return this.state.tag
+  }
+
+  set tag(tag) {
+    this.set('tag', tag)
   }
 
   _initDataSubscription() {

@@ -1,6 +1,6 @@
 import DataSubscription from './data-subscription'
 import ScenarioControl from './scenario-control'
-import ScenarioCall from './scenario-call'
+import ScenarioRun from './scenario-run'
 import StatusSubscription from './scenario-instance-subscription'
 
-export default [DataSubscription, ScenarioControl, ScenarioCall, StatusSubscription]
+export default [DataSubscription, ScenarioControl, ScenarioRun, StatusSubscription]

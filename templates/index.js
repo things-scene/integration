@@ -1,6 +1,6 @@
 import dataSubscription from './data-subscription'
 import scenarioControl from './scenario-control'
-import scenarioCall from './scenario-call'
+import scenarioRun from './scenario-run'
 import scenarioInstanceSubscription from './scenario-instance-subscription'
 
-export default [dataSubscription, scenarioControl, scenarioCall, scenarioInstanceSubscription]
+export default [dataSubscription, scenarioControl, scenarioRun, scenarioInstanceSubscription]

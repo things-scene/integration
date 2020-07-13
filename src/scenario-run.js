@@ -30,19 +30,19 @@ const NATURE = {
   'value-property': 'variables'
 }
 
-export default class ScenarioCall extends DataSource(RectPath(Shape)) {
+export default class ScenarioRun extends DataSource(RectPath(Shape)) {
   static get image() {
-    if (!ScenarioCall._image) {
-      ScenarioCall._image = new Image()
-      ScenarioCall._image.src = COMPONENT_IMAGE
+    if (!ScenarioRun._image) {
+      ScenarioRun._image = new Image()
+      ScenarioRun._image.src = COMPONENT_IMAGE
     }
-    return ScenarioCall._image
+    return ScenarioRun._image
   }
 
   render(context) {
     var { left, top, width, height } = this.bounds
     context.beginPath()
-    context.drawImage(ScenarioCall.image, left, top, width, height)
+    context.drawImage(ScenarioRun.image, left, top, width, height)
   }
 
   ready() {
@@ -106,7 +106,7 @@ export default class ScenarioCall extends DataSource(RectPath(Shape)) {
       var response = await client.query({
         query: gql`
           mutation($instanceName: String, $scenarioName: String!, $variables: Object) {
-            callScenario(instanceName: $instanceName, scenarioName: $scenarioName, variables: $variables) {
+            runScenario(instanceName: $instanceName, scenarioName: $scenarioName, variables: $variables) {
               state
               message
               data
@@ -120,9 +120,9 @@ export default class ScenarioCall extends DataSource(RectPath(Shape)) {
         }
       })
 
-      this.data = response?.data?.callScenario?.data
+      this.data = response?.data?.runScenario?.data
     }
   }
 }
 
-Component.register('scenario-call', ScenarioCall)
+Component.register('scenario-run', ScenarioRun)

@@ -25,6 +25,11 @@ const NATURE = {
       type: 'string',
       label: 'variables',
       name: 'variables'
+    },
+    {
+      type: 'checkbox',
+      label: 'run-on-start',
+      name: 'runOnStart'
     }
   ],
   'value-property': 'variables'
@@ -51,9 +56,13 @@ export default class ScenarioRun extends DataSource(RectPath(Shape)) {
   }
 
   _initScenario() {
-    if (!this.app.isViewMode) return
+    if (!this.app.isViewMode) {
+      return
+    }
     this._client = createLocalClient()
-    this.requestData()
+    if (this.state.runOnStart) {
+      this.requestData()
+    }
   }
 
   dispose() {

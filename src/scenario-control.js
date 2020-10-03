@@ -117,8 +117,8 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     var client = this._client
     var query = ''
     if (controlType == 'start') {
-      query = `mutation{
-        ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables:{}) {
+      query = `mutation($variables: Object){
+        ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables: $variables) {
           state
         }
       }`
@@ -138,7 +138,7 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
         variables:
           controlType == 'start'
             ? {
-                ...this.data
+                variables: this.data
               }
             : {}
       })

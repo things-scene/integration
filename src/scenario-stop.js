@@ -89,14 +89,15 @@ export default class ScenarioStop extends DataSource(RectPath(Shape)) {
 
   async requestData() {
     let { instanceName, scenarioName } = this.state
-    if (!scenarioName || !this.app.isViewMode) return
+    instanceName = instanceName || scenarioName
+    if (!instanceName || !this.app.isViewMode) return
 
     var client = this._client
     if (client) {
       var response = await client.query({
         query: gql`
-          mutation($instanceName: String, $scenarioName: String!) {
-            stopScenario(instanceName: $instanceName, scenarioName: $scenarioName) {
+          mutation($instanceName: String!) {
+            stopScenario(instanceName: $instanceName) {
               state
               message
               data
@@ -104,8 +105,7 @@ export default class ScenarioStop extends DataSource(RectPath(Shape)) {
           }
         `,
         variables: {
-          instanceName: instanceName,
-          scenarioName: scenarioName
+          instanceName: instanceName
         }
       })
 

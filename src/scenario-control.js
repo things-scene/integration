@@ -134,9 +134,14 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
       var response = await client.query({
         query: gql`
           ${query}
-        `
+        `,
+        variables:
+          controlType == 'start'
+            ? {
+                ...this.data
+              }
+            : {}
       })
-      this.data = response
     }
   }
 }

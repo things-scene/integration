@@ -62,7 +62,7 @@ export default class DataSubscription extends DataSource(RectPath(Shape)) {
   }
 
   set tag(tag) {
-    this.set('tag', tag)
+    this.setState('tag', tag)
   }
 
   _initDataSubscription() {

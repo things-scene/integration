@@ -33,14 +33,6 @@ const NATURE = {
           {
             display: 'stop',
             value: 'stop'
-          },
-          {
-            display: 'pause',
-            value: 'pause'
-          },
-          {
-            display: 'resume',
-            value: 'resume'
           }
         ]
       }
@@ -104,11 +96,11 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
   }
 
   get controlType() {
-    return this.get('controlType')
+    return this.getState('controlType')
   }
 
   set controlType(controlType) {
-    this.set('controlType', controlType)
+    this.setState('controlType', controlType)
   }
 
   async requestData() {
@@ -117,8 +109,8 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
     var client = this._client
     var query = ''
     if (controlType == 'start') {
-      query = `mutation($variables: Object){
-        ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables: $variables) {
+      query = `mutation{
+        ${controlType}Scenario(instanceName: "${scenarioName}", scenarioName: "${scenarioName}", variables: {}) {
           state
         }
       }`
@@ -134,14 +126,10 @@ export default class ScenarioControl extends DataSource(RectPath(Shape)) {
       var response = await client.query({
         query: gql`
           ${query}
-        `,
-        variables:
-          controlType == 'start'
-            ? {
-                variables: this.data
-              }
-            : {}
+        `
       })
+
+      this.data = response
     }
   }
 }

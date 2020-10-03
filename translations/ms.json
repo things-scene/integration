@@ -1,0 +1,8 @@
+{
+  "keyword": "keyword",
+  "label.scenario-name": "Scenario Name",
+  "label.control-type": "Control Type",
+  "label.init-data-endpoint": "Initial Data Endpoint",
+  "label.instance-name": "Instance Name",
+  "label.run-on-start": "Run on Start"
+}

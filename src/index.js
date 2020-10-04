@@ -3,6 +3,15 @@ import ScenarioControl from './scenario-control'
 import ScenarioRun from './scenario-run'
 import ScenarioStart from './scenario-start'
 import ScenarioStop from './scenario-stop'
-import StatusSubscription from './scenario-instance-subscription'
+import ScenarioInstanceSubscription from './scenario-instance-subscription'
+import ConnectionStateSubscription from './connection-state-subscription'
 
-export default [DataSubscription, ScenarioControl, ScenarioRun, ScenarioStart, ScenarioStop, StatusSubscription]
+export default [
+  DataSubscription,
+  ScenarioControl,
+  ScenarioRun,
+  ScenarioStart,
+  ScenarioStop,
+  ScenarioInstanceSubscription,
+  ConnectionStateSubscription
+]

@@ -12,6 +12,7 @@ export default {
     top: 10,
     width: 100,
     height: 100,
-    controlType: 'start'
+    controlType: '',
+    hidden: true
   }
 }

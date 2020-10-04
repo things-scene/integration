@@ -15,25 +15,20 @@ const NATURE = {
   properties: [
     {
       type: 'string',
-      label: 'scenario-name',
-      name: 'scenarioName'
-    },
-    {
-      type: 'string',
-      label: 'instance-name',
-      name: 'instanceName'
+      label: 'connection-name',
+      name: 'connectionName'
     }
   ]
 }
 
-export default class ScenarioInstanceSubscription extends DataSource(RectPath(Shape)) {
+export default class ConnectionStateSubscription extends DataSource(RectPath(Shape)) {
   static get image() {
-    if (!ScenarioInstanceSubscription._image) {
-      ScenarioInstanceSubscription._image = new Image()
-      ScenarioInstanceSubscription._image.src = COMPONENT_IMAGE
+    if (!ConnectionStateSubscription._image) {
+      ConnectionStateSubscription._image = new Image()
+      ConnectionStateSubscription._image.src = COMPONENT_IMAGE
     }
 
-    return ScenarioInstanceSubscription._image
+    return ConnectionStateSubscription._image
   }
 
   dispose() {
@@ -60,47 +55,35 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
     var { left, top, width, height } = this.bounds
 
     context.beginPath()
-    context.drawImage(ScenarioInstanceSubscription.image, left, top, width, height)
+    context.drawImage(ConnectionStateSubscription.image, left, top, width, height)
   }
 
   ready() {
     if (!this.app.isViewMode) return
-    this._initScenarioInstanceSubscription()
+    this._initConnectionStateSubscription()
   }
 
   get nature() {
     return NATURE
   }
 
-  _initScenarioInstanceSubscription() {
+  _initConnectionStateSubscription() {
     if (!this.app.isViewMode) return
     this.requestSubData()
     this.requestInitData()
   }
 
   async requestInitData() {
-    var { instanceName, scenarioName = '' } = this.state
-
-    instanceName = instanceName || scenarioName
+    var { connectionName } = this.state
 
     this.queryClient = createLocalClient()
 
     var response = await this.queryClient.query({
       query: gql`
         query{
-          scenarioInstance(instanceName:"${instanceName}") {
-            instanceName
-            scenarioName
+          fetchConnectionState(name:"${connectionName}") {
+            name
             state
-            variables
-            progress{
-              rounds
-              rate
-              steps
-              step
-            }
-            data
-            message
             timestamp
           }
         }
@@ -109,30 +92,18 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
 
     if (!this.data) {
       // this.data에 어떤 값이 있다면, 초기데이타를 적용할 필요가 없다.
-      this.data = response.data.scenarioInstance
+      this.data = response.data.fetchConnectionState
     }
   }
 
   requestSubData() {
-    var { instanceName, scenarioName = '' } = this.state
-
-    instanceName = instanceName || scenarioName
+    var { connectionName } = this.state
 
     var self = this
     var query = `subscription {
-        scenarioInstanceState(instanceName: "${instanceName}", scenarioName: "${scenarioName}") {
-          instanceName
-          scenarioName
+        connectionState(name: "${connectionName}") {
+          name
           state
-          variables
-          progress{
-            rounds
-            rate
-            steps
-            step
-          }
-          data
-          message
           timestamp
         }
       }`
@@ -157,7 +128,7 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
       this.subscription = this.client.request({ query }).subscribe({
         next({ data }) {
           if (data) {
-            self.data = data.scenarioInstanceState
+            self.data = data.connectionState
           }
         }
       })
@@ -165,4 +136,4 @@ export default class ScenarioInstanceSubscription extends DataSource(RectPath(Sh
   }
 }
 
-Component.register('scenario-instance-subscription', ScenarioInstanceSubscription)
+Component.register('connection-state-subscription', ConnectionStateSubscription)

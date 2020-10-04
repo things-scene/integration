@@ -1,5 +1,6 @@
 {
   "keyword": "keyword",
+  "label.connection-name": "[ms] connection name",
   "label.scenario-name": "Scenario Name",
   "label.control-type": "Control Type",
   "label.init-data-endpoint": "Initial Data Endpoint",

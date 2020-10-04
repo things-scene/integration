@@ -1,13 +1,13 @@
 import icon from '../assets/icon-integration.png'
 
 export default {
-  type: 'scenario-start',
-  description: 'scenario-start',
+  type: 'connection-state-subscription',
+  description: 'connection-state-subscription',
   group: 'dataSource',
   /* line|shape|textAndMedia|chartAndGauge|table|container|dataSource|IoT|3D|warehouse|form|etc */
   icon,
   model: {
-    type: 'scenario-start',
+    type: 'connection-state-subscription',
     left: 10,
     top: 10,
     width: 100,

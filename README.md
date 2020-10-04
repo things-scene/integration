@@ -17,8 +17,8 @@
 
 ```
 {
-  name: 'mqtt1', // connection name
-  state: 'CONNECTED', // CONNECTED / DISCONNECTED
+  name: 'mqtt1', /* connection name */
+  state: 'CONNECTED', /* 'CONNECTED' | 'DISCONNECTED' */
   timestamp: 4273809748
 }
 ```
@@ -49,7 +49,7 @@
 
 - 시나리오를 주어진 variables 로 시작시킨다.
 - 현재 실행중인 동일한 이름(instance name)의 시나리오 인스턴스가 없는 경우에만 새로운 시나리오를 시작한다.
-- variables(value 속성) 로 주어진 값이 시나리오 시작 시에 variables 변수로 주어진다.
+- variables(value 속성) 로 주어진 값이 시나리오 시작 시에 variables 변수로 주어진다. 이 값이 변화되거나, intent sensitive 가 설정된 경우에, 이 컴포넌트가 동작한다.
 - properties
   - instance name : (선택값) 이 이름으로 새로 시작되는 시나리오 인스턴스의 이름을 주어진 instance name 값으로 유지한다.
     scenario-stop 시에 이 이름을 instance name으로 제공하면, 해당 시나리오 인스턴스를 종료시킨다.
@@ -64,10 +64,10 @@
 
 - 시나리오를 주어진 variables 로 시작시킨다.
 - 현재 실행중인 동일한 이름(instance name)의 시나리오 인스턴스가 없는 경우에만 새로운 시나리오를 시작한다. 주어진 이름의 인스턴스가 없으면, 아무런 동작이 일어나지 않는다.
-- variables(value 속성) 로 주어진 값이 시나리오 시작 시에 variables 변수로 주어진다.
+- value : 아무런 값이 주어져도 되며, 이 값이 변화되거나, intent sensitive 가 설정된 경우에, 이 컴포넌트가 동작한다.
 - properties
-  - instance name : (선택값) 이 이름으로 존재하는 시나리오 인스턴스를 종료시킨다. 이 값을 설정하지 않으면, scenario name 속성값을 사용한다.
-  - scenario name : (선택값) 이 값을 설정하지 않으면, scenario name 속성 값을 시나리오 인스턴스 이름으로 한다.
+  - instance name : (선택값) 이 이름으로 존재하는 시나리오 인스턴스를 종료시킨다. 이 값을 설정하지 않으면, scenario name 속성값을 사용한다. 이 값을 설정하지 않으면, scenario name 속성 값을 시나리오 인스턴스 이름으로 한다.
+  - scenario name : (선택값) instance name 과 scenario name 둘 중 하나는 입력되어야 한다.
 - data
   - scenario-stop 으로 종료된 scenario instance 의 상태값 : 'STOPPED' | 'HALTED'
 
@@ -78,7 +78,7 @@
 - scenario-run 은 단기간에 종료가 보장되는 시나리오만을 대상으로 한다.
 - scenario-run 으로 실행되는 시나리오 인스턴스는 그 이름으로 관리되지 않는다.
   (scenario-start로 실행되는 시나리오 인스턴스는 instance 이름으로 관리되며, 모니터링될 수 있다.)
-- variables(value 속성) 로 주어진 값이 시나리오 시작 시에 variables 변수로 주어진다.
+- variables(value 속성) 로 주어진 값이 시나리오 시작 시에 variables 변수로 주어진다. 이 값이 변화되거나, intent sensitive 가 설정된 경우에, 이 컴포넌트가 동작한다.
 - properties
   - instance name : (선택값) deprecated 이 속성은 사용되지 않을 예정임.
   - scenario-name : (필수값) 실행될 시나리오 이름.
